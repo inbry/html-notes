@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regulatory Watch のしくみ</title>
+<style>
+:root {
+  --paper: #EDEEE9;
+  --panel: #F7F8F5;
+  --ink: #1C2B33;
+  --muted: #5E6E75;
+  --rule: #C6CDC8;
+  --signal: #B07408;
+  --mincho: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "MS PMincho", serif;
+  --gothic: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo",
+            -apple-system, BlinkMacSystemFont, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #161C1F; --panel: #1E272B; --ink: #DFE5E3;
+    --muted: #8FA0A5; --rule: #333F44; --signal: #D9A038;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  padding: 0 22px 96px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--gothic);
+  font-size: 16px;
+  line-height: 1.85;
+}
+.wrap { max-width: 34rem; margin: 0 auto; }
+
+a { color: var(--ink); }
+a:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--signal); outline-offset: 3px;
+}
+
+/* ---- 冒頭 ---- */
+header { padding: 72px 0 0; }
+.clock {
+  font-family: var(--mincho);
+  font-size: clamp(3.6rem, 17vw, 5.4rem);
+  line-height: 0.9;
+  color: var(--signal);
+  letter-spacing: -0.02em;
+}
+h1 {
+  font-family: var(--mincho);
+  font-size: clamp(1.4rem, 5.6vw, 1.85rem);
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 20px 0 0;
+}
+header p { color: var(--muted); font-size: 0.92rem; margin-top: 18px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .clock, h1 { animation: rise 700ms ease-out both; }
+  h1 { animation-delay: 120ms; }
+}
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } }
+
+/* ---- 節 ---- */
+section { margin-top: 68px; }
+h2 {
+  font-family: var(--mincho);
+  font-size: 1.22rem;
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 0 0 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+}
+h3 {
+  font-size: 0.98rem;
+  font-weight: 600;
+  margin: 34px 0 8px;
+}
+p { margin: 0 0 16px; }
+.lead { color: var(--muted); }
+
+/* ---- 朝の連続動作 ---- */
+.timeline { list-style: none; margin: 0; padding: 0; }
+.timeline > li {
+  position: relative;
+  padding: 0 0 30px 74px;
+  border-left: 2px solid var(--rule);
+  margin-left: 12px;
+}
+.timeline > li:last-child { border-left-color: transparent; padding-bottom: 0; }
+.timeline .at {
+  position: absolute;
+  left: -12px;
+  top: 2px;
+  width: 68px;
+  text-align: right;
+  font-family: var(--mincho);
+  font-size: 0.9rem;
+  color: var(--signal);
+  transform: translateX(-100%);
+}
+.timeline > li::before {
+  content: "";
+  position: absolute;
+  left: -6px; top: 10px;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--signal);
+}
+.timeline h3 { margin: 0 0 6px; }
+.timeline p { margin: 0; font-size: 0.94rem; }
+
+/* ---- 図 ---- */
+figure { margin: 26px 0; }
+svg { width: 100%; height: auto; display: block; }
+figcaption {
+  font-size: 0.84rem; color: var(--muted); margin-top: 12px; line-height: 1.7;
+}
+
+/* ---- 補足の囲み ---- */
+.note {
+  background: var(--panel);
+  border-left: 3px solid var(--signal);
+  padding: 16px 18px;
+  margin: 26px 0;
+  font-size: 0.92rem;
+}
+.note p:last-child { margin-bottom: 0; }
+
+/* ---- ファイル一覧 ---- */
+dl.files { margin: 0; }
+dl.files dt {
+  font-family: var(--mincho);
+  font-size: 0.95rem;
+  margin-top: 22px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--rule);
+}
+dl.files dd {
+  margin: 8px 0 0;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+code {
+  font-family: var(--gothic);
+  background: var(--panel);
+  padding: 1px 5px;
+  font-size: 0.94em;
+}
+
+details {
+  border-top: 1px solid var(--rule);
+  padding: 14px 0;
+}
+summary { cursor: pointer; font-size: 0.95rem; }
+details p { margin: 12px 0 0; font-size: 0.92rem; color: var(--muted); }
+
+footer {
+  margin-top: 80px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+  font-size: 0.84rem;
+  color: var(--muted);
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="clock">06:00</div>
+  <h1>毎朝この時刻に、世界のどこかでコンピュータが1台生まれ、31秒だけ働いて、消えます。</h1>
+  <p>そのあいだに何が起きているのかを、順を追って説明します。</p>
+</header>
+
+<section>
+  <h2>31秒のあいだに起きること</h2>
+  <p class="lead">日本時間の朝6時。あなたが寝ているあいだに、GitHub という会社のサーバーで次のことが順番に実行されます。</p>
+
+  <ol class="timeline">
+    <li>
+      <span class="at">0秒</span>
+      <h3>まっさらなコンピュータが用意される</h3>
+      <p>GitHub が Linux の入った仮想マシンを1台つくります。中身は空っぽです。</p>
+    </li>
+    <li>
+      <span class="at">2秒</span>
+      <h3>プログラム一式が運び込まれる</h3>
+      <p>あなたが GitHub に置いたファイル（<code>watch</code> フォルダの中身、設定、これまでの記録）が、そのコンピュータにコピーされます。</p>
+    </li>
+    <li>
+      <span class="at">5秒</span>
+      <h3>BIS のサイトに新着を聞きにいく</h3>
+      <p>国際決済銀行（BIS）が公開している一覧を読み込み、そこからバーゼル委員会に関するものだけを選び出します。</p>
+    </li>
+    <li>
+      <span class="at">6秒</span>
+      <h3>知らない記事があるか照合する</h3>
+      <p>持ち込んだ記録と見比べて、初めて見る記事を探します。あれば「今日初めて見た」と書き込みます。</p>
+    </li>
+    <li>
+      <span class="at">8秒</span>
+      <h3>ウェブページを組み立てる</h3>
+      <p>記録をもとに HTML を1枚つくります。新しい日付が上に来るように並べ、3日以内に初めて見た記事に NEW を付けます。</p>
+    </li>
+    <li>
+      <span class="at">31秒</span>
+      <h3>ページを公開し、コンピュータは消滅する</h3>
+      <p>できた HTML を公開用の場所に送り、更新した記録を GitHub に書き戻して、仮想マシンは破棄されます。</p>
+    </li>
+  </ol>
+</section>
+
+<section>
+  <h2>なぜ「消えるコンピュータ」で困らないのか</h2>
+  <p>ここが一番わかりにくいところです。毎回まっさらなコンピュータが使われるということは、<strong>前回の作業内容が何も残っていない</strong>ということです。昨日どの記事を見たのかも、覚えていません。</p>
+  <p>そこで、記録だけを GitHub 本体に書き戻しています。仕事を終えたコンピュータが、自分のノートを郵送してから消えるようなものです。翌朝の新しいコンピュータは、そのノートを受け取ってから仕事を始めます。</p>
+
+  <figure>
+    <svg viewBox="0 0 460 220" role="img" aria-label="GitHubの保管庫と、毎朝生まれて消える一時的なコンピュータのあいだで記録がやりとりされる図">
+      <g fill="none" stroke="var(--rule)" stroke-width="1.5">
+        <rect x="8" y="70" width="150" height="80" rx="4"/>
+        <rect x="302" y="70" width="150" height="80" rx="4" stroke-dasharray="5 4"/>
+      </g>
+      <text x="83" y="100" text-anchor="middle" font-size="13" fill="var(--ink)" font-family="var(--gothic)">GitHub の保管庫</text>
+      <text x="83" y="122" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="var(--gothic)">ずっと残る</text>
+      <text x="377" y="100" text-anchor="middle" font-size="13" fill="var(--ink)" font-family="var(--gothic)">朝だけのコンピュータ</text>
+      <text x="377" y="122" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="var(--gothic)">31秒で消える</text>
+
+      <g stroke="var(--signal)" stroke-width="1.5" fill="none">
+        <path d="M162 96 L296 96"/>
+        <path d="M288 91 L296 96 L288 101"/>
+        <path d="M298 128 L164 128"/>
+        <path d="M172 123 L164 128 L172 133"/>
+      </g>
+      <text x="229" y="86" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="var(--gothic)">記録を渡す</text>
+      <text x="229" y="150" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="var(--gothic)">更新した記録を返す</text>
+
+      <text x="229" y="196" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="var(--gothic)">この往復があるから、毎回まっさらでも記憶が続く</text>
+    </svg>
+  </figure>
+
+  <div class="note">
+    <p>この記録が <code>state/items.json</code> というファイルです。記事ごとに「初めて見た日時」が入っていて、この値は一度書いたら二度と書き換えません。書き換わってしまうと、古い記事に毎朝 NEW が付き直すことになります。</p>
+  </div>
+</section>
+
+<section>
+  <h2>新着はどうやって知るのか</h2>
+  <p>BIS のサイトを人間のように読んでいるわけではありません。多くのサイトは、更新のお知らせ専用のファイルを別に用意しています。RSS と呼ばれるものです。</p>
+  <p>中身は「見出し・リンク・日付・短い説明」が並んだだけの単純なデータです。デザインも広告も入っていないので、プログラムから読むのが簡単です。BIS の場合、直近10件ぶんが入っています。</p>
+  <p>ただし、そこには BIS 全体のお知らせが混ざっています。人事の発表も、決済分野の別組織のものも一緒です。そこで「Basel Committee」などの言葉を含むものだけを選び出しています。今のところ、10件中2件がこれに当てはまります。</p>
+
+  <div class="note">
+    <p>10件しか入っていないので、もし1か月止まっていると、そのあいだの発表を取りこぼします。毎朝動かしているのはそのためでもあります。</p>
+  </div>
+</section>
+
+<section>
+  <h2>なぜサーバー代がかからないのか</h2>
+  <p>あなたがサイトを開いたとき、実は何も計算されていません。朝6時の時点でできあがった HTML ファイルが1枚置いてあるだけで、それをそのまま送っているだけです。</p>
+  <p>ニュースサイトの多くは、誰かが開くたびにデータベースを調べてページを組み立てています。だからサーバーが必要で、費用もかかります。こちらは朝に1回だけ組み立てて、あとは置いておく方式です。</p>
+  <p>この方式を静的サイトと呼びます。速く、壊れにくく、そしてこの規模なら無料で公開できます。</p>
+</section>
+
+<section>
+  <h2>それぞれのファイルの役割</h2>
+  <p class="lead">プログラムは仕事の内容ごとに分かれています。あとから直したいとき、どこを見ればよいかがはっきりします。</p>
+
+  <dl class="files">
+    <dt>config/sources.toml</dt>
+    <dd>設定ファイル。どのサイトを見るか、何件表示するか、NEW を何時間出すか。あなたが手を入れる場所は基本的にここだけです。金融庁や日銀を追加したくなったら、このファイルに数行足します。</dd>
+
+    <dt>watch/fetch.py</dt>
+    <dd>RSS を取ってきて読み解く係。形式が少しずつ違う何種類かの RSS を、同じやり方で扱えるようにしています。</dd>
+
+    <dt>watch/state.py</dt>
+    <dd>記録の出し入れをする係。「初めて見た日時」を守る役目もここが持っています。</dd>
+
+    <dt>watch/render.py</dt>
+    <dd>HTML と RSS を組み立てる係。並び順、月の区切り、NEW の判定、見た目のすべて。</dd>
+
+    <dt>watch/main.py</dt>
+    <dd>進行役。上の3つを順番に呼び出します。</dd>
+
+    <dt>.github/workflows/build-deploy.yml</dt>
+    <dd>朝6時の段取り書。GitHub はこのファイルを読んで、何時に何をするかを知ります。</dd>
+  </dl>
+</section>
+
+<section>
+  <h2>いま眠っている機能</h2>
+  <p><code>watch/enrich.py</code> というファイルがありますが、今は一度も動いていません。英語の見出しを日本語に訳し、要約をつけ、重要度を点数化する係です。</p>
+  <p>これを動かすには外部のサービスを呼ぶ必要があり、費用と、鍵を預ける手間がかかります。まず訳がなくても困らないかを確かめてから決めることにしたので、設定で止めてあります。設定を1か所書き換えれば動き出します。</p>
+</section>
+
+<section>
+  <h2>うまく動かなくなったとき</h2>
+
+  <details>
+    <summary>朝になってもページが更新されない</summary>
+    <p>GitHub の Actions タブを開くと、毎朝の実行履歴が並んでいます。赤い印が付いている行をクリックすると、どの段階で止まったかが読めます。</p>
+  </details>
+
+  <details>
+    <summary>記事が1件も出なくなった</summary>
+    <p>異常とは限りません。バーゼル委員会の発表は月に数件で、何週間も何もない時期があります。ページの一番下に最終更新の時刻が出ているので、そこが今朝の日付なら正常に動いています。</p>
+  </details>
+
+  <details>
+    <summary>古い記事に NEW が付きっぱなしになる</summary>
+    <p>記録の中の「初めて見た日時」が書き換わっている可能性があります。本来は一度書いたら変わらない値です。</p>
+  </details>
+</section>
+
+<footer>
+  <p>Regulatory Watch のしくみ。2026年9月時点の構成にもとづく説明です。</p>
+</footer>
+
+</div>
+</body>
+</html>

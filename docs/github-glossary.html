@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GitHub のことば</title>
+<style>
+:root {
+  --paper: #EDEEE9;
+  --panel: #F7F8F5;
+  --ink: #1C2B33;
+  --muted: #5E6E75;
+  --rule: #C6CDC8;
+  --signal: #B07408;
+  --mincho: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "MS PMincho", serif;
+  --gothic: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo",
+            -apple-system, BlinkMacSystemFont, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #161C1F; --panel: #1E272B; --ink: #DFE5E3;
+    --muted: #8FA0A5; --rule: #333F44; --signal: #D9A038;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  padding: 0 22px 96px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--gothic);
+  font-size: 16px;
+  line-height: 1.85;
+}
+.wrap { max-width: 34rem; margin: 0 auto; }
+a { color: var(--ink); }
+a:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+
+header { padding: 64px 0 0; }
+h1 {
+  font-family: var(--mincho);
+  font-size: clamp(1.5rem, 6vw, 2rem);
+  font-weight: 400;
+  line-height: 1.45;
+  margin: 0;
+}
+header p { color: var(--muted); font-size: 0.92rem; margin: 18px 0 0; }
+
+/* ---- 全体図 ---- */
+figure { margin: 40px 0 0; }
+svg { width: 100%; height: auto; display: block; }
+svg text { font-family: var(--gothic); }
+figcaption { font-size: 0.84rem; color: var(--muted); margin-top: 14px; line-height: 1.7; }
+
+/* ---- 場所ごとの節 ---- */
+section { margin-top: 72px; }
+.place {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 6px;
+}
+.place .n {
+  font-family: var(--mincho);
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--signal);
+}
+.place h2 {
+  font-family: var(--mincho);
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin: 0;
+}
+.place-note { color: var(--muted); font-size: 0.9rem; margin: 0 0 8px; }
+
+dl { margin: 0; }
+dt {
+  font-family: var(--mincho);
+  font-size: 1.02rem;
+  margin-top: 32px;
+}
+dd { margin: 6px 0 0; }
+dd + dd {
+  margin-top: 8px;
+  padding-left: 14px;
+  border-left: 2px solid var(--rule);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+code {
+  font-family: var(--gothic);
+  background: var(--panel);
+  padding: 1px 5px;
+  font-size: 0.94em;
+}
+.note {
+  background: var(--panel);
+  border-left: 3px solid var(--signal);
+  padding: 16px 18px;
+  margin: 32px 0 0;
+  font-size: 0.92rem;
+}
+.note p { margin: 0; }
+.note p + p { margin-top: 12px; }
+footer {
+  margin-top: 84px; padding-top: 20px;
+  border-top: 1px solid var(--rule);
+  font-size: 0.84rem; color: var(--muted);
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>GitHub のことば</h1>
+  <p>このサイトを作るあいだに出てきた用語を、出てきた場所ごとに並べました。まず全体の地図から。</p>
+</header>
+
+<figure>
+  <svg viewBox="0 0 420 610" role="img" aria-label="あなたのPC、GitHubの保管庫、朝だけのコンピュータ、公開されるサイトの4つの場所と、そのあいだのファイルの流れを示した図">
+    <defs>
+      <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5"
+              markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0 0 L10 5 L0 10" fill="none" stroke="var(--signal)" stroke-width="1.6"/>
+      </marker>
+    </defs>
+
+    <!-- 1 -->
+    <rect x="20" y="14" width="380" height="76" rx="4" fill="none" stroke="var(--rule)" stroke-width="1.5"/>
+    <text x="44" y="44" font-size="20" fill="var(--signal)" font-family="serif">1</text>
+    <text x="72" y="44" font-size="14" fill="var(--ink)">あなたのPC</text>
+    <text x="72" y="68" font-size="11.5" fill="var(--muted)">Claude Code で書いたファイル一式</text>
+
+    <path d="M210 92 L210 130" stroke="var(--signal)" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+    <text x="222" y="116" font-size="11.5" fill="var(--muted)">git push（1回だけ）</text>
+
+    <!-- 2 -->
+    <rect x="20" y="136" width="380" height="86" rx="4" fill="none" stroke="var(--rule)" stroke-width="1.5"/>
+    <text x="44" y="166" font-size="20" fill="var(--signal)" font-family="serif">2</text>
+    <text x="72" y="166" font-size="14" fill="var(--ink)">GitHub の保管庫</text>
+    <text x="72" y="190" font-size="11.5" fill="var(--muted)">リポジトリ。ファイルと、これまでの記録</text>
+    <text x="72" y="209" font-size="11.5" fill="var(--muted)">ずっと残る場所</text>
+
+    <path d="M150 224 L150 268" stroke="var(--signal)" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+    <text x="20" y="252" font-size="11.5" fill="var(--muted)">運び込む</text>
+    <path d="M270 268 L270 224" stroke="var(--signal)" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+    <text x="282" y="252" font-size="11.5" fill="var(--muted)">記録を返す</text>
+
+    <!-- 3 -->
+    <rect x="20" y="274" width="380" height="128" rx="4" fill="none" stroke="var(--rule)" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <text x="44" y="304" font-size="20" fill="var(--signal)" font-family="serif">3</text>
+    <text x="72" y="304" font-size="14" fill="var(--ink)">朝だけのコンピュータ</text>
+    <text x="72" y="328" font-size="11.5" fill="var(--muted)">毎朝6時に生まれ、31秒で消える</text>
+    <text x="72" y="360" font-size="11.5" fill="var(--muted)">・BIS に新着を聞きにいく</text>
+    <text x="72" y="380" font-size="11.5" fill="var(--muted)">・HTML を1枚組み立てる</text>
+
+    <path d="M210 404 L210 442" stroke="var(--signal)" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+    <text x="222" y="428" font-size="11.5" fill="var(--muted)">できた HTML を渡す</text>
+
+    <!-- 4 -->
+    <rect x="20" y="448" width="380" height="76" rx="4" fill="none" stroke="var(--rule)" stroke-width="1.5"/>
+    <text x="44" y="478" font-size="20" fill="var(--signal)" font-family="serif">4</text>
+    <text x="72" y="478" font-size="14" fill="var(--ink)">公開されるサイト</text>
+    <text x="72" y="502" font-size="11.5" fill="var(--muted)">inbry.github.io/bcbs-watch/</text>
+
+    <path d="M210 526 L210 560" stroke="var(--signal)" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+
+    <text x="210" y="588" font-size="13" fill="var(--ink)" text-anchor="middle">iPhone のホーム画面</text>
+  </svg>
+  <figcaption>1 から 2 への矢印はセットアップのときだけ。以降は 2・3・4 のあいだで毎朝くり返されます。</figcaption>
+</figure>
+
+<div class="note">
+  <p><strong>Git と GitHub は別物です。</strong>ここが最初の混乱どころなので先に。</p>
+  <p>Git は、あなたのPCに入っている道具です。ファイルの変更を記録して、いつでも過去に戻せるようにします。ネットにつながっていなくても動きます。GitHub は、その記録を預かってくれる会社のサービスです。Git がなくても GitHub は使えますし、その逆も成り立ちます。今回は両方を使いました。</p>
+</div>
+
+<section>
+  <div class="place"><span class="n">1</span><h2>あなたのPCで出てきたことば</h2></div>
+  <p class="place-note">PowerShell に打ち込んだコマンドまわり。</p>
+
+  <dl>
+    <dt>リポジトリ</dt>
+    <dd>ファイル一式と、その変更履歴をまとめて入れておく箱。日本語では「レポジトリ」と書くこともあります。</dd>
+    <dd><code>bcbs-watch</code> フォルダがそれです。<code>git init</code> を実行した瞬間に、このフォルダはリポジトリになりました。</dd>
+
+    <dt>git init</dt>
+    <dd>「このフォルダを Git で管理します」という宣言。フォルダの中に <code>.git</code> という隠しフォルダができ、そこに履歴が溜まっていきます。</dd>
+
+    <dt>git add</dt>
+    <dd>記録に含めるファイルを選ぶ操作。まだ記録はされません。写真を撮る前に、誰が写るかを決める段階だと思ってください。</dd>
+    <dd><code>-A</code> は「全部」という意味です。</dd>
+
+    <dt>コミット</dt>
+    <dd>選んだ状態を1つの記録として確定させること。ここで初めて履歴に残ります。あとから「この時点に戻す」ができるのは、コミットした地点だけです。</dd>
+    <dd><code>-m "Initial commit"</code> の部分は、その記録につける名前です。あとで見返したときに何をしたか分かるように書きます。</dd>
+
+    <dt>ブランチ / main</dt>
+    <dd>履歴の枝分かれのこと。複数人で作業するとき、それぞれ別の枝で試して、あとで合流させます。</dd>
+    <dd>一人で使う場合は枝は1本だけです。その1本の名前が <code>main</code> です。<code>git branch -M main</code> は、その名前を付ける操作でした。</dd>
+
+    <dt>リモート / origin</dt>
+    <dd>手元ではない、ネット上の保管先のこと。<code>origin</code> はその保管先に付けたあだ名で、慣習的にこの名前が使われます。</dd>
+    <dd><code>git remote add origin https://github.com/inbry/bcbs-watch.git</code> は、「これから origin と呼ぶ送り先は、この URL です」という登録でした。</dd>
+
+    <dt>push</dt>
+    <dd>手元の記録を、リモートに送る操作。逆に、リモートから手元へ持ってくるのは pull と呼びます。</dd>
+    <dd>今回は最初の1回だけ実行しました。以降の更新は GitHub 側で自動的に行われるので、あなたが push することはありません。</dd>
+
+    <dt>.gitignore</dt>
+    <dd>記録に含めないファイルを書いておく一覧。書いておくと <code>git add -A</code> をしても無視されます。</dd>
+    <dd>毎朝作り直される <code>public</code> フォルダと、要件定義書がここに入っています。</dd>
+
+    <dt>Git Credential Manager</dt>
+    <dd>パスワードの代わりに認証を覚えてくれる仕組み。push のときに一度だけブラウザが開いたのがこれです。以降は聞かれません。</dd>
+  </dl>
+</section>
+
+<section>
+  <div class="place"><span class="n">2</span><h2>GitHub の保管庫で出てきたことば</h2></div>
+  <p class="place-note">ブラウザで設定した項目。</p>
+
+  <dl>
+    <dt>Public / Private</dt>
+    <dd>リポジトリを誰でも見られるようにするか、自分だけにするか。</dd>
+    <dd>今回は Public を選びました。無料プランでは Private のままサイトを公開できないためです。だから公開前に、設定ファイルから所属が分かる記述を消しました。</dd>
+
+    <dt>Settings</dt>
+    <dd>リポジトリごとの設定画面。歯車のアイコンです。似た名前でアカウント全体の設定もあるので、どちらを開いているかは注意が必要です。</dd>
+
+    <dt>Workflow permissions</dt>
+    <dd>自動実行のプログラムに、どこまで許すかの設定。</dd>
+    <dd>「Read and write permissions」に変えたのは、毎朝の処理が記録を書き戻す必要があるからです。初期状態は読み取りだけなので、変えないと毎朝失敗します。</dd>
+
+    <dt>GITHUB_TOKEN</dt>
+    <dd>自動実行のプログラムが GitHub を操作するための、その場かぎりの合鍵。実行が終わると無効になります。あなたが用意するものではなく、自動で発行されます。</dd>
+    <dd>上の「Workflow permissions」は、この合鍵にどこまでの権限を持たせるかの設定でした。</dd>
+
+    <dt>Secrets</dt>
+    <dd>パスワードや API キーなど、人に見せられない値を暗号化して預けておく場所。プログラムからは読めますが、画面上では中身が伏せられます。</dd>
+    <dd>翻訳を有効にするときに使う予定の場所です。今は何も入れていません。</dd>
+  </dl>
+</section>
+
+<section>
+  <div class="place"><span class="n">3</span><h2>朝だけのコンピュータで出てきたことば</h2></div>
+  <p class="place-note">毎朝6時に動く部分。設定ファイル <code>build-deploy.yml</code> の中身です。</p>
+
+  <dl>
+    <dt>GitHub Actions</dt>
+    <dd>GitHub が用意している自動実行の仕組み。「こういうときに、こういうことをして」と書いておくと、そのとおりに動きます。無料枠があり、この規模なら費用はかかりません。</dd>
+
+    <dt>ワークフロー</dt>
+    <dd>その「何をするか」を書いた手順書。<code>.github/workflows/</code> というフォルダに置くと、GitHub が自動的に見つけて読み込みます。</dd>
+    <dd>拡張子の <code>.yml</code> は YAML という書き方の印です。字下げで階層を表す形式で、字下げがずれると動かなくなります。</dd>
+
+    <dt>ジョブ / ステップ</dt>
+    <dd>ワークフローの中の単位。ジョブが大きなまとまりで、その中に細かいステップが並びます。</dd>
+    <dd>今回は build（組み立て）と deploy（公開）という2つのジョブがあり、build の中に「ファイルを持ち込む」「Python を用意する」といったステップが並んでいます。</dd>
+
+    <dt>ランナー / ubuntu-latest</dt>
+    <dd>実際に処理を行うコンピュータのこと。GitHub が貸してくれます。</dd>
+    <dd><code>ubuntu-latest</code> は「最新の Ubuntu（Linux の一種）を使う」という指定です。毎回まっさらな状態で用意され、終わると破棄されます。</dd>
+
+    <dt>cron</dt>
+    <dd>「何時に動かすか」を表す古くからの書き方。5つの数字で分・時・日・月・曜日を指定します。</dd>
+    <dd><code>"0 21 * * *"</code> は「毎日21時00分」。ただし世界標準時なので、日本時間では翌朝6時になります。<code>*</code> は「毎回」の意味です。</dd>
+
+    <dt>workflow_dispatch</dt>
+    <dd>手動で動かせるようにする指定。これを書いておくと、Actions タブに「Run workflow」ボタンが出ます。</dd>
+    <dd>時刻を待たずに試したいときに使います。あなたが最初に押したボタンがこれです。</dd>
+
+    <dt>concurrency</dt>
+    <dd>同じ処理が重ならないようにする指定。前の実行が終わるまで、次を待たせます。</dd>
+    <dd>記録を書き戻す作りなので、2つが同時に動くと記録が壊れます。それを防いでいます。</dd>
+
+    <dt>アーティファクト</dt>
+    <dd>ジョブが作った成果物を、次のジョブに引き渡すための一時的な置き場。</dd>
+    <dd>build が組み立てた HTML をここに置き、deploy がそれを受け取って公開しています。</dd>
+  </dl>
+</section>
+
+<section>
+  <div class="place"><span class="n">4</span><h2>公開まわりのことば</h2></div>
+
+  <dl>
+    <dt>GitHub Pages</dt>
+    <dd>リポジトリの中身をそのままウェブサイトとして公開してくれる機能。HTML を置くだけでよく、サーバーの用意も費用も不要です。</dd>
+
+    <dt>Source</dt>
+    <dd>Pages が「どこから」ページを取ってくるかの設定。</dd>
+    <dd>「Deploy from a branch」ではなく「GitHub Actions」を選んだのは、毎朝の処理が作った HTML を渡す方式にしたからです。</dd>
+
+    <dt>deploy</dt>
+    <dd>できたものを実際に公開する操作。「配備する」という意味の英語です。</dd>
+    <dd>実行画面で deploy のジョブに URL が表示されていたのは、そこが公開の最終地点だからです。</dd>
+
+    <dt>無料プラン / Pro</dt>
+    <dd>GitHub の料金体系。無料でもほとんどのことができますが、いくつか制限があります。</dd>
+    <dd>Private のリポジトリからサイトを公開するには Pro が必要でした。そのため今回は Public を選んでいます。</dd>
+  </dl>
+</section>
+
+<footer>
+  <p>このプロジェクトで実際に出てきた用語だけを収めています。2026年9月時点。</p>
+</footer>
+
+</div>
+</body>
+</html>
