@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>内申点のしくみ｜公立高校入試</title>
+<style>
+  :root{
+    --paper:#F6F7F4;
+    --ink:#1C2B36;
+    --ink-soft:#5A6B77;
+    --rule:#DDE1DC;
+    --aka:#C4362B;     /* 採点の赤 */
+    --indigo:#3A5590;  /* 5教科 */
+    --moss:#7E9A6B;    /* 実技4教科 */
+    --sand:#D8B65C;    /* 当日点・その他 */
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:
+      repeating-linear-gradient(to bottom, transparent 0 27px, rgba(28,43,54,.045) 27px 28px),
+      var(--paper);
+    color:var(--ink);
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
+    font-size:15.5px;
+    line-height:1.75;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px 80px}
+
+  h1,h2,h3{
+    font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+    font-weight:600;
+    letter-spacing:.02em;
+    line-height:1.4;
+  }
+  h1{font-size:2.05rem;margin:0 0 .5em}
+  h2{font-size:1.42rem;margin:0 0 .2em}
+  h3{font-size:1.02rem;margin:2.2em 0 .6em;font-family:inherit;font-weight:700;letter-spacing:.03em}
+  p{margin:0 0 1em}
+  .lede{font-size:1.02rem;color:var(--ink-soft)}
+
+  header.hero{padding:64px 0 40px}
+  .kanji-big{
+    font-family:"Hiragino Mincho ProN","Yu Mincho",serif;
+    font-size:clamp(3.4rem,14vw,5.6rem);
+    line-height:1;
+    letter-spacing:.06em;
+    margin:0 0 .18em;
+    color:var(--ink);
+  }
+  .kanji-big em{font-style:normal;color:var(--aka)}
+
+  section{padding:44px 0;border-top:1px solid var(--rule)}
+  .secnum{
+    display:inline-block;font-size:.78rem;color:var(--aka);
+    border:1px solid currentColor;border-radius:2px;
+    padding:1px 7px;margin-bottom:10px;letter-spacing:.08em;
+  }
+
+  /* 積み上げバー */
+  .stack{display:flex;height:52px;border-radius:4px;overflow:hidden;margin:14px 0 6px;
+         box-shadow:inset 0 0 0 1px rgba(28,43,54,.09)}
+  .seg{display:flex;align-items:center;justify-content:center;color:#fff;
+       font-size:.78rem;font-weight:700;letter-spacing:.02em;text-align:center;padding:0 4px;min-width:0}
+  .seg small{display:block;font-weight:400;font-size:.68rem;opacity:.88}
+  .s-indigo{background:var(--indigo)}
+  .s-moss{background:var(--moss)}
+  .s-sand{background:var(--sand);color:#4A3B10}
+  .s-aka{background:var(--aka)}
+  .s-ghost{background:#E7E9E4;color:var(--ink-soft);box-shadow:inset 0 0 0 1px rgba(28,43,54,.07)}
+  .cap{font-size:.8rem;color:var(--ink-soft);margin:0 0 4px}
+
+  /* 倍率バー */
+  .mult{margin:18px 0 4px}
+  .mult-row{display:grid;grid-template-columns:78px 1fr 62px;align-items:center;gap:10px;margin-bottom:9px}
+  .mult-name{font-size:.86rem;font-weight:700}
+  .mult-track{height:15px;background:#E7E9E4;border-radius:8px;overflow:hidden}
+  .mult-fill{height:100%;background:var(--moss);border-radius:8px}
+  .mult-fill.hot{background:var(--aka)}
+  .mult-val{font-size:.84rem;color:var(--ink-soft);text-align:right;font-variant-numeric:tabular-nums}
+
+  /* 計算式カード */
+  .formula{
+    border:1px solid var(--rule);background:#fff;border-radius:6px;
+    padding:18px 20px;margin:18px 0;
+  }
+  .formula .eq{font-size:1.02rem;line-height:2;letter-spacing:.01em}
+  .formula .eq b{color:var(--aka)}
+  .formula .note{font-size:.82rem;color:var(--ink-soft);margin:8px 0 0}
+
+  /* フロー */
+  .flow{display:flex;gap:10px;margin:18px 0 6px;flex-wrap:wrap}
+  .flow-box{flex:1 1 220px;border:1px solid var(--rule);background:#fff;border-radius:6px;padding:14px 16px}
+  .flow-box h4{margin:0 0 6px;font-size:.92rem}
+  .flow-box p{margin:0;font-size:.85rem;color:var(--ink-soft);line-height:1.7}
+  .flow-box.primary{border-color:var(--indigo);border-width:1.5px}
+  .flow-box.second{border-color:var(--aka);border-width:1.5px}
+
+  /* 比率スケール */
+  .scale{margin:18px 0 6px}
+  .scale-bar{display:flex;border-radius:4px;overflow:hidden;height:38px;box-shadow:inset 0 0 0 1px rgba(28,43,54,.09)}
+  .scale-bar div{display:flex;align-items:center;justify-content:center;font-size:.74rem;font-weight:700;color:#fff}
+  .scale-labels{display:flex;justify-content:space-between;font-size:.76rem;color:var(--ink-soft);margin-top:6px}
+
+  /* 学年パターン */
+  .years{display:grid;gap:12px;margin:18px 0 6px}
+  .yrow{display:grid;grid-template-columns:106px 1fr;align-items:center;gap:12px}
+  .yname{font-size:.86rem;font-weight:700;line-height:1.4}
+  .ybar{display:flex;gap:5px}
+  .ycell{flex:1;height:36px;border-radius:3px;display:flex;align-items:center;justify-content:center;
+         font-size:.74rem;font-weight:700;color:#fff;background:var(--indigo)}
+  .ycell.off{background:#E7E9E4;color:#A6ADA4}
+  .ycell.x2{background:#2E4676}
+  .ycell.x3{background:#233757}
+  .ycell.x6{background:var(--aka)}
+
+  /* 県カード */
+  .pref{display:grid;gap:0;margin:16px 0 0;border-top:1px solid var(--rule)}
+  .pcard{padding:14px 0;border-bottom:1px solid var(--rule)}
+  .pcard h4{margin:0 0 4px;font-size:.98rem;display:flex;align-items:baseline;gap:9px}
+  .pcard h4 span{font-size:.76rem;color:var(--aka);font-weight:600}
+  .pcard p{margin:0;font-size:.87rem;color:var(--ink-soft);line-height:1.75}
+
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.78rem;color:var(--ink-soft);margin:6px 0 0}
+  .legend i{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+
+  footer{padding:34px 0 0;border-top:1px solid var(--rule);font-size:.8rem;color:var(--ink-soft)}
+  @media(max-width:520px){
+    .mult-row{grid-template-columns:66px 1fr 52px}
+    .yrow{grid-template-columns:84px 1fr}
+    .seg{font-size:.7rem}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <p class="kanji-big">実技<em>×20</em></p>
+  <h1>内申点のしくみ</h1>
+  <p class="lede">同じ通知表の「4」でも、住んでいる県によって入試での重さは20倍違う。公立高校入試の内申点は、対象学年・実技4教科の扱い・学力検査との比率、この3つの軸で読み解ける。</p>
+</header>
+
+<section>
+  <span class="secnum">前提</span>
+  <h2>内申点とは何か</h2>
+  <p>調査書（内申書）の「学習の記録」欄にある9教科の5段階評定を、点数に換算したもの。2002年度以降は全国で相対評価が廃止され、目標に準拠した絶対評価に統一された。</p>
+  <p>評定の土台には3つの観点別評価があり、定期テストの点数だけでなく提出物や授業への取り組みも反映される。</p>
+  <div class="formula">
+    <p class="eq" style="font-size:.95rem;line-height:1.9;margin:0">
+      知識・技能　／　思考・判断・表現　／　主体的に学習に取り組む態度<br>
+      <span style="color:var(--ink-soft);font-size:.85rem">この3観点をまとめて、各教科が1〜5の評定になる</span>
+    </p>
+  </div>
+  <p>絶対評価にしたことで「学校ごとに基準がそろわない」問題が生まれた。その調整に正面から取り組んでいるのが後述の大阪府である。</p>
+</section>
+
+<section>
+  <span class="secnum">東京都</span>
+  <h2>中3だけ、実技は2倍</h2>
+
+  <h3>換算内申は65点満点</h3>
+  <p class="cap">5教科の評定合計＋実技4教科の評定合計×2</p>
+  <div class="stack">
+    <div class="seg s-indigo" style="flex:25">5教科<small>25点分</small></div>
+    <div class="seg s-moss" style="flex:40">実技4教科 ×2<small>40点分</small></div>
+  </div>
+  <p class="cap">実技4教科が換算内申の6割を占める</p>
+
+  <h3>一般入試の総合得点は1020点満点</h3>
+  <div class="stack">
+    <div class="seg s-sand" style="flex:700">学力検査 700</div>
+    <div class="seg s-indigo" style="flex:300">調査書 300</div>
+    <div class="seg s-aka" style="flex:20" title="ESAT-J 20点"></div>
+  </div>
+  <p class="legend">
+    <span><i style="background:var(--sand)"></i>5教科500点を1.4倍</span>
+    <span><i style="background:var(--indigo)"></i>換算内申65点を換算</span>
+    <span><i style="background:var(--aka)"></i>ESAT-J 20点</span>
+  </p>
+  <div class="formula">
+    <p class="eq" style="margin:0">換算内申<b>1点</b> ≒ 総合得点で約<b>4.6点</b><br>実技の評定が1つ上がると <b>約9.2点</b>ぶん</p>
+    <p class="note">調査書300点 ÷ 換算内申65点 から算出。当日の1教科で9点差を作るより、実技で「4」を「5」にするほうが早い場面がある。</p>
+  </div>
+
+  <h3>おさえておきたい3点</h3>
+  <div class="flow">
+    <div class="flow-box"><h4>問題が学校で違う</h4><p>理社は全校共通問題。進学指導重点校などは国数英が自校作成問題で、2026年度は10校が3教科、1校が英語で実施。</p></div>
+    <div class="flow-box"><h4>ESAT-J</h4><p>中3の11月頃に受検する英語スピーキングテスト。A〜Fの6段階が20〜0点に換算されて加算される。</p></div>
+    <div class="flow-box"><h4>推薦は内申50%まで</h4><p>推薦入試では調査書点が総合成績に占める割合の上限が50%。残りは面接・集団討論・作文や小論文で決まる。</p></div>
+  </div>
+  <p style="margin-top:18px">近年の変更として、男女別定員が2024年度入試で完全撤廃され、2026年度からは全日制の分割募集が廃止された。</p>
+</section>
+
+<section>
+  <span class="secnum">神奈川県</span>
+  <h2>中2から、実技は等倍</h2>
+
+  <h3>135点満点の内訳</h3>
+  <div class="stack">
+    <div class="seg s-indigo" style="flex:45">中2 学年末<small>45点</small></div>
+    <div class="seg s-moss" style="flex:90">中3 12月末 ×2<small>90点</small></div>
+  </div>
+  <p class="cap">9教科すべて等倍。一部の高校は3教科以内で最大2倍まで重点化できる</p>
+
+  <h3>2月の共通選抜1回で、定員100%が決まる</h3>
+  <p>推薦入試も前期・後期日程もない。2024年度からは面接も廃止され、内申点・学力検査・特色検査（一部校）の3要素になった。</p>
+  <div class="flow">
+    <div class="flow-box primary">
+      <h4>第1次選考　定員の90%</h4>
+      <p>内申135点と学力検査500点の比率を、各校が合計10になるよう設定する。最低が2なので2：8〜8：2の範囲。特色検査実施校は「6：4：特色検査2」のような形になる。</p>
+    </div>
+    <div class="flow-box second">
+      <h4>第2次選考　残りの10%</h4>
+      <p>内申点を使わない。学力検査に加えて、中3・12月時点の「主体的に学習に取り組む態度」をA=3・B=2・C=1として9教科27点満点で点数化する。</p>
+    </div>
+  </div>
+  <p style="margin-top:16px">内申が届かなくても当日点で押し切れる枠が制度として用意されている点が、東京との大きな違いになる。</p>
+
+  <h3>学校が選べる比率の幅</h3>
+  <div class="scale">
+    <div class="scale-bar">
+      <div style="flex:2;background:var(--indigo)">内申2</div>
+      <div style="flex:8;background:var(--sand);color:#4A3B10">学力検査8</div>
+    </div>
+    <div class="scale-labels"><span>当日点重視の学校</span><span>内申重視なら最大8：2まで</span></div>
+  </div>
+</section>
+
+<section>
+  <span class="secnum">全国</span>
+  <h2>実技4教科の倍率</h2>
+  <p>同じ「音楽の4」が、県によってここまで違う重さになる。</p>
+  <div class="mult">
+    <div class="mult-row"><span class="mult-name">神奈川県</span><span class="mult-track"><span class="mult-fill" style="width:5%"></span></span><span class="mult-val">等倍</span></div>
+    <div class="mult-row"><span class="mult-name">東京都</span><span class="mult-track"><span class="mult-fill" style="width:10%"></span></span><span class="mult-val">2倍</span></div>
+    <div class="mult-row"><span class="mult-name">兵庫県</span><span class="mult-track"><span class="mult-fill" style="width:37.5%"></span></span><span class="mult-val">7.5倍</span></div>
+    <div class="mult-row"><span class="mult-name">鹿児島県</span><span class="mult-track"><span class="mult-fill hot" style="width:100%"></span></span><span class="mult-val">20倍</span></div>
+  </div>
+  <p class="cap">兵庫県は5教科×4倍・実技×7.5倍で250点満点。鹿児島県は5教科×2倍・実技×20倍で450点満点</p>
+
+  <h3>鹿児島県の内申450点の中身</h3>
+  <div class="stack">
+    <div class="seg s-indigo" style="flex:50">5教科 50</div>
+    <div class="seg s-aka" style="flex:400">実技4教科 400</div>
+  </div>
+  <p class="cap">内申点の約9割が実技4教科。学力検査も450点満点なので、実技の評定1つが当日20点分に相当する</p>
+</section>
+
+<section>
+  <span class="secnum">全国</span>
+  <h2>対象になる学年</h2>
+  <div class="years">
+    <div class="yrow"><span class="yname">東京・愛知<br>静岡・福岡</span>
+      <span class="ybar"><span class="ycell off">中1</span><span class="ycell off">中2</span><span class="ycell">中3</span></span></div>
+    <div class="yrow"><span class="yname">神奈川・富山</span>
+      <span class="ybar"><span class="ycell off">中1</span><span class="ycell">中2</span><span class="ycell x2">中3 ×2</span></span></div>
+    <div class="yrow"><span class="yname">千葉・埼玉<br>広島ほか多数</span>
+      <span class="ybar"><span class="ycell">中1</span><span class="ycell">中2</span><span class="ycell x2">中3</span></span></div>
+    <div class="yrow"><span class="yname">大阪</span>
+      <span class="ybar"><span class="ycell x2">中1 ×2</span><span class="ycell x2">中2 ×2</span><span class="ycell x6">中3 ×6</span></span></div>
+  </div>
+  <p class="cap" style="margin-top:12px">中3のみが東京・愛知・静岡・福岡・兵庫・鹿児島など、中2からが神奈川・富山、残る約3分の2の道府県は中1から3年間すべてが対象になる</p>
+</section>
+
+<section>
+  <span class="secnum">道府県</span>
+  <h2>特色のある制度</h2>
+  <div class="pref">
+    <div class="pcard">
+      <h4>大阪府 <span>絶対評価の格差を調整する</span></h4>
+      <p>府内統一の「チャレンジテスト」を実施し、府全体の平均点と各中学校の平均点を比べて、その学校がつけてよい評定の範囲を調整する。定期テストで高得点でも、学校全体の結果次第で期待どおりの評定にならないことがある。各校は学力検査と内申の比率をタイプⅠ（7：3）〜タイプⅤ（3：7）から選ぶ。</p>
+    </div>
+    <div class="pcard">
+      <h4>愛知県 <span>公立2校に出願できる</span></h4>
+      <p>中3のみ45点を2倍した90点と、当日点110点の合計200点満点。複合選抜で公立2校に出願でき、各校が内申重視・当日重視・均等の3類型から選ぶ。</p>
+    </div>
+    <div class="pcard">
+      <h4>北海道 <span>内申がランクになる</span></h4>
+      <p>中1・中2を各2倍、中3を3倍した315点満点。この点数をA〜Mのランクに区分し、「Bランクならこの高校」という形で進路指導が行われる。</p>
+    </div>
+    <div class="pcard">
+      <h4>千葉県 <span>学校ごとに係数がかかる</span></h4>
+      <p>3学年合計135点満点に、各校が定める係数K（0.5〜2）を掛ける。同じ内申でも学校によって重みが2倍以上変わる。</p>
+    </div>
+    <div class="pcard">
+      <h4>埼玉県 <span>学校裁量がもっとも大きい</span></h4>
+      <p>標準は中1：中2：中3＝1：1：2だが、1：1：3などもあり、学年比重も満点も各校が独自に設定して公表する。</p>
+    </div>
+    <div class="pcard">
+      <h4>広島県 <span>「自己表現」が柱のひとつ</span></h4>
+      <p>中1・中2に中3を3倍した225点満点。2023年度からの新制度で、自分の思いや考えを述べる「自己表現」が学力検査・調査書と並ぶ扱いになった。</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>制度は毎年細かく変わるため、実際に受験する年度については各都道府県教育委員会の入学者選抜実施要綱で確認してください。記載は2026年度（令和8年度）入試時点の内容にもとづいています。</p>
+</footer>
+
+</div>
+</body>
+</html>
